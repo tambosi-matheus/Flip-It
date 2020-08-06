@@ -7,29 +7,36 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     public Animator anim;
 
+    public float rotationSpeed = 60;
     public float jumpPower = 5f;
-    public Transform startPos;
+    private bool onAir;
+
     private void Start()
     {        
         rb = GetComponent<Rigidbody>();
-        rb.detectCollisions = true;
-        transform.position = startPos.position;
-        transform.rotation = startPos.rotation;
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKey(KeyCode.A))
         {
-            rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            rb.angularVelocity = rotationSpeed * Vector3.forward;
+        }
+
+
+        if(onAir && transform.position.y < 12)
+        {
+            anim.enabled = true;
+            rb.velocity = Vector3.zero;
+            onAir = false;
         }
     }
 
     public void OnAir()
     {
         anim.enabled = false;
-        //rb.detectCollisions = true;
-        //rb.useGravity = true;
-        rb.AddForce((Vector3.up * jumpPower), ForceMode.Impulse);        
+        rb.velocity = Vector3.zero;
+        rb.AddForce((Vector3.up * jumpPower), ForceMode.Impulse);
+        onAir = true;
     }
 }
