@@ -7,9 +7,11 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     public Animator anim;
 
-    public float rotationSpeed = 60;
+    public float rotationSpeed = -60;
     public float jumpPower = 5f;
     private bool onAir;
+    public int currentAngle;
+    public int spinCount;
 
     private void Start()
     {        
@@ -22,9 +24,11 @@ public class PlayerController : MonoBehaviour
         {
             rb.angularVelocity = rotationSpeed * Vector3.forward;
         }
+        else
+            rb.angularVelocity = Vector3.zero;
 
 
-        if(onAir && transform.position.y < 12)
+        if (onAir && transform.position.y < 12)
         {
             anim.enabled = true;
             rb.velocity = Vector3.zero;
@@ -38,5 +42,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.AddForce((Vector3.up * jumpPower), ForceMode.Impulse);
         onAir = true;
+        currentAngle = (int)rb.rotation.y - 1;
     }
 }
